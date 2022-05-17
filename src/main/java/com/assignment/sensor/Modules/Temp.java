@@ -3,33 +3,33 @@ package com.assignment.sensor.Modules;
 import java.time.LocalDateTime;
 
 public class Temp {
-    int id;
-    String value;
+    long id;
+    float value;
     LocalDateTime timestamp;
 
     public Temp() {
 
     }
 
-    public Temp(int id, String value, LocalDateTime timestamp) {
+    public Temp(long id, float value, LocalDateTime timestamp) {
         this.id = id;
         this.value = value;
         this.timestamp = timestamp;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(float value) {
         this.value = value;
     }
 

@@ -9,7 +9,9 @@
 <body>
     <h1>Detta är min heading</h1>
     Graph here
-    <div th:text="${temp}"></div>
+    <div th:each="temp : ${temps}">
+        <div th:text="${temp.getValue()}"></div>
+    </div>
 </body>
 
 </html>

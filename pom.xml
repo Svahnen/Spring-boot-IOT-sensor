@@ -69,4 +69,12 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>target</id>
+            <name>Target Repo</name>
+            <url>file://target</url>
+        </repository>
+    </distributionManagement>
+
 </project>
