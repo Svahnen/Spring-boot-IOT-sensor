@@ -30,8 +30,22 @@ public class Dao {
         }
     }
 
-    public class Cursor {
-        long id = 0;
+    public static class Cursor {
+        public static long NOT_STARTED_VAL = 0;
+        long oldest = 0;
+        public long newest = 0;
+
+        public Cursor() {
+            oldest = 0;
+        }
+
+        public Cursor(long start) {
+            oldest = start;
+        }
+
+        public long toNumber() {
+            return oldest;
+        }
     }
 
     public Cursor newCursor() {
@@ -47,16 +61,42 @@ public class Dao {
         ResultSet rs = null;
         long last_id = 0;
         try {
-            if (cur.id == 0) {
+            if (cur.oldest == 0) {
                 stmt = con.prepareStatement(sqlFirst);
                 stmt.setInt(1, howmany);
                 rs = stmt.executeQuery();
             } else {
                 stmt = con.prepareStatement(sqlRest);
                 stmt.setInt(2, howmany);
-                stmt.setLong(1, cur.id);
+                stmt.setLong(1, cur.oldest);
                 rs = stmt.executeQuery();
             }
+            while (rs.next()) {
+                var temp = rs.getFloat("value");
+                var id = rs.getLong("id");
+                var timestamp = rs.getTimestamp("timestamp").toLocalDateTime();
+                if (cur.newest == 0) {
+                    cur.newest = id;
+                }
+                res.add(new Temp(id, temp, timestamp));
+                last_id = id;
+            }
+        } finally {
+            rs.close();
+        }
+        cur.oldest = last_id;
+        return res;
+    }
+
+    public ArrayList<Temp> getNewer(Cursor cur) throws SQLException {
+        ArrayList<Temp> res = new ArrayList<Temp>();
+
+        var sql = "SELECT id, value, timestamp FROM temperature WHERE id > ? ORDER BY id ASC";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setLong(1, cur.newest);
+        long last_id = 0;
+
+        try (var rs = stmt.executeQuery()) {
             while (rs.next()) {
                 var temp = rs.getFloat("value");
                 var id = rs.getLong("id");
@@ -64,10 +104,9 @@ public class Dao {
                 res.add(new Temp(id, temp, timestamp));
                 last_id = id;
             }
-        } finally {
-            rs.close();
         }
-        cur.id = last_id;
+
+        cur.newest = last_id;
         return res;
     }
 }
