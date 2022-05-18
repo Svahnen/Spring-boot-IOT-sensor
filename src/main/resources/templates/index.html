@@ -45,9 +45,6 @@
 </head>
 
 <body>
-
-
-    <h1>Detta är min heading</h1>
     <div id="chart_div"></div>
     <div th:each="temp : ${temps}">
         <div th:text="${temp.getValue()}"></div>
