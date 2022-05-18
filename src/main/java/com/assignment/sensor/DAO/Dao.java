@@ -85,7 +85,6 @@ public class Dao {
 
         PreparedStatement stmt;
         ResultSet rs = null;
-        long last_id = 0;
         try {
             if (cur.oldest == 0) {
                 stmt = con.prepareStatement(sqlFirst);
