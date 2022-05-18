@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import java.sql.SQLNonTransientConnectionException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 // shamelessly stolen without credit
 
 @Component
@@ -55,5 +58,10 @@ public class LiveUpdateHandler extends TextWebSocketHandler {
         for (WebSocketSession webSocketSession : sessions) {
             webSocketSession.sendMessage(foo);
         }
+    }
+
+    @ExceptionHandler(SQLNonTransientConnectionException.class)
+    public void handleSQLDisconnect() throws SQLException {
+        dao.connect();
     }
 }
