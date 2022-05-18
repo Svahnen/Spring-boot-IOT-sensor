@@ -7,7 +7,13 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script th:inline="javascript">
 
-        let temp1 = [[${ temps[0].getValue() }]]; // this works but vs does not know the syntax (so it says error)
+        let temps = [[${ temps }]]; // converts the Java List to an JS Array (vs code does not know thymeleaf syntax and says error here)
+
+        let tempRows = [] // creates an empty array to store the rows
+        temps.forEach(temp => { //stores the temperatures as [ "2022-05-17T11:19:03", 25 ]
+            tempRows.push([temp.timestamp, temp.value])
+        });
+
 
         // Load the Visualization API and the corechart package.
         google.charts.load('current', { 'packages': ['corechart'] });
@@ -24,18 +30,12 @@
             let data = new google.visualization.DataTable();
             data.addColumn('string', 'Timestamp');
             data.addColumn('number', 'Temperature');
-            data.addRows([
-                ['2022-02-22', temp1],
-                ['2022-02-23', 25],
-                ['2022-02-24', 9],
-                ['2022-02-25', 30],
-                ['2022-02-26', 27]
-            ]);
+            data.addRows(tempRows);
 
             // Set chart options
             let options = {
                 'title': 'temperature status: ',
-                'width': 400,
+                'width': 1024,
                 'height': 300
             };
 
@@ -48,9 +48,6 @@
 
 <body>
     <div id="chart_div"></div>
-    <div th:each="temp : ${temps}">
-        <div th:text="${temp.getValue()}"></div>
-    </div>
 </body>
 
 </html>
