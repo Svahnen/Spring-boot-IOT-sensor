@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 public class Temp {
     long id;
     float value;
-    LocalDateTime timestamp;
+    String timestamp;
 
     public Temp() {
 
     }
 
-    public Temp(long id, float value, LocalDateTime timestamp) {
+    public Temp(long id, float value, String timestamp) {
         this.id = id;
         this.value = value;
         this.timestamp = timestamp;
@@ -33,11 +33,11 @@ public class Temp {
         this.value = value;
     }
 
-    public LocalDateTime getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

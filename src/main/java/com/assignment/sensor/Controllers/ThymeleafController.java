@@ -16,7 +16,8 @@ public class ThymeleafController {
     @RequestMapping("/")
     public String index(Model model) throws SQLException {
 
-        model.addAttribute("temps", dao.getAllHistory());
+        var c = new Dao.Cursor();
+        model.addAttribute("temps", dao.getHistory(25, c));
 
         return "index";
     }

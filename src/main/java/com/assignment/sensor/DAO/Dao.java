@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.assignment.sensor.Modules.Temp;
 
@@ -31,7 +32,7 @@ public class Dao {
             if (rs.next()) {
                 var id = rs.getLong(1);
                 var temp = rs.getFloat(2);
-                var ts = rs.getTimestamp(3).toLocalDateTime();
+                var ts = rs.getString(3);
                 return new Temp(id, temp, ts);
             } else
                 return null;
@@ -70,7 +71,7 @@ public class Dao {
             while (rs.next()) {
                 var temp = rs.getFloat("value");
                 var id = rs.getLong("id");
-                var timestamp = rs.getTimestamp("timestamp").toLocalDateTime();
+                var timestamp = rs.getString("timestamp");
                 res.add(new Temp(id, temp, timestamp));
             }
         }
@@ -99,17 +100,19 @@ public class Dao {
             while (rs.next()) {
                 var temp = rs.getFloat("value");
                 var id = rs.getLong("id");
-                var timestamp = rs.getTimestamp("timestamp").toLocalDateTime();
-                if (cur.newest == 0) {
+                var timestamp = rs.getString("timestamp");
+                if (cur.newest < id) {
                     cur.newest = id;
                 }
+                if (cur.oldest > id) {
+                    cur.oldest = id;
+                }
                 res.add(new Temp(id, temp, timestamp));
-                last_id = id;
             }
         } finally {
             rs.close();
         }
-        cur.oldest = last_id;
+        Collections.reverse(res);
         return res;
     }
 
@@ -125,7 +128,7 @@ public class Dao {
             while (rs.next()) {
                 var temp = rs.getFloat("value");
                 var id = rs.getLong("id");
-                var timestamp = rs.getTimestamp("timestamp").toLocalDateTime();
+                var timestamp = rs.getString("timestamp");
                 res.add(new Temp(id, temp, timestamp));
                 last_id = id;
             }

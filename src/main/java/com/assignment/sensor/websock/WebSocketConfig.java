@@ -15,7 +15,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
         try {
             registry.addHandler(new LiveUpdateHandler(), "/live");
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
