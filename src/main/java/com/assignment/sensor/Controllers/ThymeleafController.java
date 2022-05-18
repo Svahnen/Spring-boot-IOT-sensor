@@ -13,19 +13,11 @@ public class ThymeleafController {
 
     Dao dao = new Dao();
 
-    @RequestMapping("/websocket")
-    public String websocket(Model model) throws SQLException {
+    @RequestMapping("/")
+    public String index(Model model) throws SQLException {
 
         model.addAttribute("temps", dao.getAllHistory());
 
-        return "websocket";
-    }
-
-    @RequestMapping("/graph")
-    public String graph(Model model) throws SQLException {
-
-        model.addAttribute("temps", dao.getAllHistory());
-
-        return "graph";
+        return "index";
     }
 }
