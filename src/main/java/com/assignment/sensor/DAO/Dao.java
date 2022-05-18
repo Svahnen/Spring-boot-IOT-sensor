@@ -12,6 +12,14 @@ import com.assignment.sensor.Modules.Temp;
 public class Dao {
     Connection con;
 
+    public Dao() {
+        try {
+            connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void connect() throws SQLException {
         con = DriverManager.getConnection("jdbc:mariadb://100.107.10.54/data?user=grupp&password=iot");
     }
@@ -37,10 +45,12 @@ public class Dao {
 
         public Cursor() {
             oldest = 0;
+            newest = 0;
         }
 
         public Cursor(long start) {
             oldest = start;
+            newest = 0;
         }
 
         public long toNumber() {
@@ -50,6 +60,21 @@ public class Dao {
 
     public Cursor newCursor() {
         return new Cursor();
+    }
+
+    public ArrayList<Temp> getAllHistory() throws SQLException {
+        ArrayList<Temp> res = new ArrayList<Temp>();
+        var sql = "SELECT id, value, timestamp FROM temperature ORDER BY id ASC";
+        var stmt = con.prepareStatement(sql);
+        try (var rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                var temp = rs.getFloat("value");
+                var id = rs.getLong("id");
+                var timestamp = rs.getTimestamp("timestamp").toLocalDateTime();
+                res.add(new Temp(id, temp, timestamp));
+            }
+        }
+        return res;
     }
 
     public ArrayList<Temp> getHistory(int howmany, Cursor cur) throws SQLException {
