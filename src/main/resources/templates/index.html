@@ -8,20 +8,20 @@
     <script th:inline="javascript">
 
         let ws = new WebSocket('ws://localhost:8080/live');
-        let foobar = null;
+        let foobar = null
 
-        let temps = [[${ temps }]]; // converts the Java List to an JS Array (vs code does not know thymeleaf syntax and says error here)
+        let temps = [[${ temps }]] // converts the Java List to an JS Array (vs code does not know thymeleaf syntax and says error here)
 
         let tempRows = [] // creates an empty array to store the rows
         temps.forEach(temp => { //stores the temperatures as [ "2022-05-17T11:19:03", 25 ]
             tempRows.push([temp.timestamp, temp.value])
-        });
+        })
 
         setTimeout(function () {
             setInterval(function () {
                 ws.send(temps[temps.length - 1].id)
-            }, 1000);
-        }, 5000);
+            }, 1000)
+        }, 5000)
 
 
         ws.onmessage = function (data) {
@@ -29,8 +29,7 @@
             stuff.forEach(element => {
                 tempRows.push([element.timestamp, element.value])
                 temps.push(element) // update temps so we dont get old "latest" values
-                temps.shift();
-                tempRows.shift();
+                tempRows.splice(0, 1)
             });
             if (stuff.length != 0) {
                 drawChart()
@@ -62,7 +61,7 @@
 
             // Instantiate and draw our chart, passing in some options.
             let chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
+            chart.draw(data, options)
         }
     </script>
 </head>
