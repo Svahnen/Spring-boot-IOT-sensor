@@ -7,7 +7,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script th:inline="javascript">
 
-        let ws = new WebSocket('ws://localhost:8080/live');
+        let ws = new WebSocket('ws://' + location.host + '/live');
         let foobar = null
 
         let temps = [[${ temps }]] // converts the Java List to an JS Array (vs code does not know thymeleaf syntax and says error here)
