@@ -1,11 +1,13 @@
 package com.assignment.sensor.Controllers;
 
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 
 import com.assignment.sensor.DAO.Dao;
 import com.assignment.sensor.Modules.Temp;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +41,10 @@ public class TestController {
         var c = new Dao.Cursor();
         c.newest = cur;
         return dao.getNewer(c);
+    }
+
+    @ExceptionHandler(SQLNonTransientConnectionException.class)
+    public void handleSQLDisconnect() throws SQLException {
+        dao.connect();
     }
 }
