@@ -19,7 +19,7 @@ public class ThymeleafController {
     public String index(Model model) throws SQLException {
 
         var c = new Dao.Cursor();
-        model.addAttribute("temps", dao.getHistory(25, c));
+        model.addAttribute("temps", dao.getHistory(15, c));
 
         return "index";
     }
