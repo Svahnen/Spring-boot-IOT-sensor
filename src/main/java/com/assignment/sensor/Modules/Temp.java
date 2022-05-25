@@ -1,7 +1,5 @@
 package com.assignment.sensor.Modules;
 
-import java.time.LocalDateTime;
-
 public class Temp {
     long id;
     float value;
